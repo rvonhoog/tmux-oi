@@ -4,10 +4,10 @@ A tiny tmux plugin: **one keybind that jumps to the next AI-agent session waitin
 your input.** "oi" = the noise you make to get someone's attention — which is what the
 tool does on your behalf when an agent is blocked and needs you.
 
-Status: **pop.sh, push.sh, oi.tmux and README written and tested (2026-09-30). Hook
-wired in `~/.claude/settings.json` and `run-shell ~/code/tmux-oi/oi.tmux` added to the
-dotfiles tmux.conf, both pointing at this checkout. Not committed yet.** This file is
-the handoff so a fresh session has the full context.
+Status: **Published 2026-09-30 at https://github.com/rvonhoog/tmux-oi and installed via
+TPM.** Dotfiles tmux.conf carries `set -g @plugin 'rvonhoog/tmux-oi'` (uncommitted there);
+the Notification hook points at `~/.tmux/plugins/tmux-oi/scripts/push.sh`. This checkout
+is for development; after pushing, `prefix + U` (TPM update) refreshes the installed copy.
 
 ## What it does (the harpoon-style, one-key-pop UX)
 
@@ -53,7 +53,7 @@ tmux-oi/
   `*.tmux` in the plugin dir at startup). It reads the one user option and registers
   the bind:
   - `@oi_key` (default `g`) — the key after prefix
-- Install elsewhere via TPM: `set -g @plugin 'rvonhoog/tmux-oi'` (repo not pushed yet).
+- Install via TPM: `set -g @plugin 'rvonhoog/tmux-oi'`.
 
 ## Decisions made (2026-09-24)
 
@@ -83,25 +83,23 @@ design over fixing the file version.
   `~/.tmux.conf`). TPM is already installed and in use there.
 - `~/.claude/settings.json` has two `Notification` groups: peon-ping (matcher `""`) and
   tmux-oi (matcher `permission_prompt|idle_prompt|elicitation_dialog|elicitation_url_dialog|agent_needs_input`), pointing at
-  this checkout's `scripts/push.sh`. Claude Code's file watcher applies settings.json hook
+  the TPM copy `~/.tmux/plugins/tmux-oi/scripts/push.sh`. Claude Code's file watcher applies settings.json hook
   edits to running sessions; verified 2026-09-30 by seeing two panes flagged minutes after
   wiring, with no restart.
 - `$TMUX_PANE` example from a live pane: `%52`.
 
 ## Related
 
-- Spawned from beads issue **DOT-jwh** in the dotfiles repo ("tmux Claude ready-queue:
-  jump to waiting sessions via keybinding"). Close/track that once tmux-oi ships.
+- Spawned from beads issue **DOT-jwh** in the dotfiles repo; closed 2026-09-30 on publish.
 
 ## Next steps
 
 1. ~~scripts, README, hook wiring, tmux.conf line~~ done.
 2. Real-world test: push is verified firing (two panes flagged by real sessions). Still
    untested by a human: pressing `prefix + g` and landing on one.
-3. Pre-commit workflow (`/simplify` already run on the file version; rerun on this one),
-   first commit.
-4. Publish to `rvonhoog/tmux-oi`; swap the tmux.conf `run-shell` line for `@plugin`;
-   update the hook path in settings.json to the TPM install location.
+3. ~~Pre-commit workflow, first commit, publish, TPM switch-over~~ done.
+4. Decide on the two review follow-ups: auto-clear (`UserPromptSubmit` hook unsetting
+   the flag) and pushing from the `Stop` event too.
 
 ## Follow-up ideas (user's, 2026-09-30)
 
